@@ -1,12 +1,10 @@
 from rest_framework import serializers
 from api.models import User
 
-class UserSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=30)
-    email = serializers.CharField(max_length=30)
-    active = serializers.BooleanField()
-    avatar_url = serializers.CharField(default='https://uploads-ssl.webflow.com/6198a2e43048192ebafec2cc/63d221403d9cfe4ced015d95_yxRQH9s6VEU6gldnFhl3PDigUW31MIHSSqavg8i9s24.png', max_length=15)
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'email', 'active', 'avatar_url']
 
     def create(self, validated_data):
         """
