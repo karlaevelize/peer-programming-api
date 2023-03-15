@@ -1,6 +1,9 @@
+from django.contrib.auth.models import User
 from rest_framework import generics
-from api.models import User, Project
-from api.serializers import UserSerializer, ProjectSerializer
+from rest_framework import permissions
+from api.models import Project
+from api.serializers import ProjectSerializer, UserSerializer
+from api.permissions import IsOwnerOrReadOnly
 
 # User views
 
@@ -17,4 +20,8 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class ProjectList(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user)
     
